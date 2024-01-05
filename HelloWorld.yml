@@ -1,0 +1,7 @@
+---
+- name: Hello Amazing World 
+  hosts: all
+  tasks:
+    - ansible.builtin.shell: sleep 3600
+        
+  
