@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/component: httpd
     app.kubernetes.io/instance: httpd
   name: httpd
-  namespace: default
+  namespace: demo
 spec:
   tls:
     insecureEdgeTerminationPolicy: Redirect
