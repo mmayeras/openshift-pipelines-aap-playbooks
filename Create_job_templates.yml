@@ -23,6 +23,7 @@
         playbook: "Create_ee.yml"
         state: present
         inventory: "Demo Inventory"
+        #execution_environment: ee_name
 
   tasks:
     - name: "Add {{ template.name }}" 
@@ -34,6 +35,16 @@
         state: "{{ template.state }}"
         inventory: "{{ template.inventory }}"
         #execution_environment:
+        extra_vars:
+          job_templates:
+          - name: Create custom EE
+            job_type: run
+            credentials:
+            - Demo vault
+            project: "openshift-pipelines-aap-playbooks"
+            playbook: "Create_ee.yml"
+            state: present
+            inventory: "Demo Inventory"
       loop: "{{ job_templates }}"
       loop_control:
         loop_var: template
