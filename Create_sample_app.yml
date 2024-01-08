@@ -7,12 +7,12 @@
     - name: Create deployment
       redhat.openshift.k8s:
         state: present
-        src: svc.yml
+        src: deploymeny.yml
 
     - name: Create svc
       redhat.openshift.k8s:
         state: present
-        src: deployment.yml
+        src: svc.yml
 
     - name: Create route
       redhat.openshift.k8s:
