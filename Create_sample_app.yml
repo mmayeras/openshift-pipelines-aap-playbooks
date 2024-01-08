@@ -7,7 +7,7 @@
     - name: Create deployment
       redhat.openshift.k8s:
         state: present
-        src: deploymeny.yml
+        src: deployment.yml
 
     - name: Create svc
       redhat.openshift.k8s:
