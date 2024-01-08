@@ -33,6 +33,7 @@
         job_type: "{{ template.job_type }}"
         credentials: "{{ template.credentials | default(omit) }}"
         project: "{{ template.project }}"
+        playbook: "{{ template.playbook }}"
         state: "{{ template.state }}"
         inventory: "{{ template.inventory }}"
         execution_environment: "{{ template.execution_environment | default(omit) }}"
