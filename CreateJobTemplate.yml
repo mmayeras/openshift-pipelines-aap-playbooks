@@ -4,37 +4,36 @@
   connection: local
   gather_facts: false
   module_defaults:
-    ansible.controller.execution_environment:
+    ansible.controller.job_template:
       controller_oauthtoken: !vault |
           $ANSIBLE_VAULT;1.1;AES256
-          30613031343835353866643336623763336463303734616236383761343634313332623931663234
-          6133393466353032303130636263353566353963323861320a396539323834396564616130383063
-          38336334363131383832666666333263303437343636643731336362366634343835396237626131
-          3262336632306234340a396561333363653832346335373166633664363933663762353937306466
-          63633838363239616664373961623464356363356233643839333465396266373761
+          34393335623536613261643139323731336134613866666633336430666630636434386530376462
+          6361343665363061373933363166643662623339313965380a623236373836386561653230386139
+          65633932623734616131343138333339623531353332623134343166373630303439393734376531
+          6662376664353262380a383662353235346439653239326235313731623463373736323136663434
+          61326261636230653266333032303231326131326538636535373134653761326435
       controller_host: http://aac-service.ansible-automation-platform/ 
   vars:
     job_templates:
-      - name: Create Linux Machine on AWS
+      - name: Create custom EE
         job_type: run
-        credentials:
-          - Vault Credential
+        # credentials:
+        #   - Vault Credential
         project: "openshift-pipelines-aap-playbooks"
-        playbook: "DeployLinuxAWS.yml"
+        playbook: "Create_ee.yml"
         state: present
         inventory: "Demo Inventory"
 
   tasks:
-    - name: Add Execution environements
+    - name: "Add {{ template.name }}" 
       ansible.controller.job_template:
         name: "{{ template.name }}"
         job_type: "{{ template.job_type }}"
-        credentials: "{{ template.credentials }}"
+        credentials: "{{ template.credentials | default(omit) }}"
         project: "{{ template.project }}"
         state: "{{ template.state }}"
         inventory: "{{ template.inventory }}"
-        
-        
+        #execution_environment:
       loop: "{{ job_templates }}"
       loop_control:
         loop_var: template

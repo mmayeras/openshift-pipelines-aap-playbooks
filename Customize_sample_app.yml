@@ -1,0 +1,26 @@
+---
+- name: Create sample app
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Create configmap
+      redhat.openshift.k8s:
+        state: present
+        src: configmap.yml
+
+    - name: Customize deployment
+      redhat.openshift.k8s:
+        state: present
+        src: deployment.yml
+
+    - name: Get a list of all pods from any namespace
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: demo
+      register: pod_list    
+
+    - name: Print output
+      ansible.builtin.debug:
+        var: item.metadata.name
+      loop: "{{ pod_list.resources }}"
