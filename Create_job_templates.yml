@@ -24,6 +24,10 @@
         state: present
         inventory: "Demo Inventory"
         #execution_environment: ee_name
+        extra_vars:  
+          ees:
+          - name: some_ee
+            image: some_image
         
 
   tasks:
@@ -37,6 +41,7 @@
         state: "{{ template.state }}"
         inventory: "{{ template.inventory }}"
         execution_environment: "{{ template.execution_environment | default(omit) }}"
+        extra_vars: "{{ template.extra_vars | default(omit) }}"
       loop: "{{ job_templates }}"
       loop_control:
         loop_var: template
