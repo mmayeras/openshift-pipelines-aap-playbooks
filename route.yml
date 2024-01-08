@@ -14,7 +14,7 @@ spec:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
   port:
-    targetPort: 8080-tcp
+    targetPort: port-1
   to:
     kind: Service
     name: httpd
