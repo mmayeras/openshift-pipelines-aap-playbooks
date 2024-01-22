@@ -1,0 +1,28 @@
+---
+- name: Create Execution Environments
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  module_defaults:
+    ansible.controller.execution_environment:
+      controller_oauthtoken: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          34393335623536613261643139323731336134613866666633336430666630636434386530376462
+          6361343665363061373933363166643662623339313965380a623236373836386561653230386139
+          65633932623734616131343138333339623531353332623134343166373630303439393734376531
+          6662376664353262380a383662353235346439653239326235313731623463373736323136663434
+          61326261636230653266333032303231326131326538636535373134653761326435
+      controller_host: http://aac-service.ansible-automation-platform/ 
+  vars:
+    ees:
+      - name: some_ee
+        image: some_image
+
+  tasks:
+    - name: "Add {{ ee.name }}" 
+      ansible.controller.execution_environment:
+        name: "{{ ee.name }}"
+        image: "{{ ee.image }}"
+      loop: "{{ ees }}"
+      loop_control:
+        loop_var: ee

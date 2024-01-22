@@ -1,0 +1,29 @@
+---
+- name: Create sample app
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    custom_message: "Hello, there!"
+    custom_message2: "Thank you for using Ansible Automation Platform!"
+  tasks:
+    - name: Create configmap
+      redhat.openshift.k8s:
+        state: present
+        template: configmap.yml.j2
+
+    - name: Customize deployment
+      redhat.openshift.k8s:
+        state: present
+        src: deployment_cm.yml
+
+    - name: Get a list of all pods from any namespace
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: demo
+      register: pod_list    
+
+    - name: Print output
+      ansible.builtin.debug:
+        var: item.metadata.name
+      loop: "{{ pod_list.resources }}"

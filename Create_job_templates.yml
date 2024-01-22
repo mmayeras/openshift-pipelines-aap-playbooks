@@ -1,0 +1,47 @@
+---
+- name: Create Execution Environments
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  module_defaults:
+    ansible.controller.job_template:
+      controller_oauthtoken: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          34393335623536613261643139323731336134613866666633336430666630636434386530376462
+          6361343665363061373933363166643662623339313965380a623236373836386561653230386139
+          65633932623734616131343138333339623531353332623134343166373630303439393734376531
+          6662376664353262380a383662353235346439653239326235313731623463373736323136663434
+          61326261636230653266333032303231326131326538636535373134653761326435
+      controller_host: http://aac-service.ansible-automation-platform/ 
+  vars:
+    job_templates:
+      - name: Create custom EE
+        job_type: run
+        credentials:
+         - Demo vault 
+        project: "Demo Playbooks"
+        playbook: "Create_ee.yml"
+        state: present
+        inventory: "Demo Inventory"
+        #execution_environment: ee_name
+        extra_vars:  
+          ees:
+          - name: some_ee
+            image: some_image
+        
+
+  tasks:
+    - name: "Add {{ template.name }}" 
+      ansible.controller.job_template:
+        name: "{{ template.name }}"
+        job_type: "{{ template.job_type }}"
+        credentials: "{{ template.credentials | default(omit) }}"
+        project: "{{ template.project }}"
+        playbook: "{{ template.playbook }}"
+        state: "{{ template.state }}"
+        inventory: "{{ template.inventory }}"
+        execution_environment: "{{ template.execution_environment | default(omit) }}"
+        extra_vars: "{{ template.extra_vars | default(omit) }}"
+      loop: "{{ job_templates }}"
+      loop_control:
+        loop_var: template

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index-html-configmap
+  namespace: demo
+data:
+  index.html: |
+    <html>
+    <h1>{{ custom_message }}</h1>
+    </br>
+    <h2>{{ custom_message2 }}</h2>
+    </html

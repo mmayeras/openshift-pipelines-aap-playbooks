@@ -1,0 +1,31 @@
+---
+- name: Create sample app
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Create deployment
+      redhat.openshift.k8s:
+        state: present
+        src: deployment.yml
+
+    - name: Create svc
+      redhat.openshift.k8s:
+        state: present
+        src: svc.yml
+
+    - name: Create route
+      redhat.openshift.k8s:
+        state: present
+        src: route.yml
+
+    - name: Get a list of all pods from any namespace
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: demo
+      register: pod_list
+
+    - name: Print output
+      debug:
+        var: item.metadata.name
+      loop: "{{ pod_list.resources }}"
